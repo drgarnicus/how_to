@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>How To Use the HeathIndicators.Gov API</title>
+		 <link rel="stylesheet" type="text/css" href="Styles.css"/>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" scr="https://cdnjs.cloudflare.com/ajax/libs/hiw-api/5.2.0/hiw-api.js"></script>
+        
+	</head>
+	<body>
+	<h1>Overview: Vital Information Missing from HealthIndicators API documentation</h1>
+		<h2>After Getting the API Key:  How to <em>Really</em> Test the API Key</h2>
+		<div>
+		<h3>What is good:</h3>
+		<p>The <a href="http://developers.healthindicators.gov/Documentation">documentation</a> for the website is quite detailed and even offers tutorials (that at one point was offered via
+			Codecademy.com.)</p>
+		<p>There are great examples of code to follow and get a stronger idea of how the overall API
+			works for the site.</p>
+		<h3>What is not good:</h3>
+		<p>However, despite all that, there is one item they do not cover so well---which is to say at all---that is necessary
+			simply to test that the API key you obtained was valid.</p>
+
+		<p>In perusing <a href="http://developers.healthindicators.gov/Examples/RESTIntro/ObtainingAnAPIKey">Obtain an API Key</a>, I copied the code listed on that page, saved the file, opened it up,<br> saw nothing happened, 
+		opened the console and saw the following <u>error with this script located in the header:</u></br></p>
+
+		<p>
+			<code>type="text/javascript" src="HIWHelper.js</code>
+		</p>
+
+		<p>Nowhere on the site is the file<b> HIWHelper.js</b> mentioned or located any place <em>immediately</em> noticable (i.e. "findable") within the documentation page.</p>
+		<h4>Why does this matter:</h4>
+		<p>Without this file, the <b>HIW</b> object that creates the API connection cannot be created:  you're dead in the water.</p>
+		<h4>Quick workaround to test API validity:</h4>
+		You can, however, test that your API is valid.  Simply enter the following code string into the URL address:
+
+		<p>
+			<code>http://services.healthindicators.gov/v5/REST.svc/Ages/1?Key={YOUR-API-KEY}
+			</code>
+		</p>
+
+		<p>If your API key is valid, a document tree for the Data in the Ages category will generate.  Great for testing, but we
+			need to be able to access it via script.</p>
+		</div>
+
+		<h2>What is the workaround:</h2>
+
+
+
+	<div id="Log">
+    	<h1>Log</h1>
+    </div>
+ 
+    	<script type="text/javascript">
+    		/*var api = new HIW("http://services.healthindicators.gov/v5/REST.svc", "533aa05d6b034a08a84de9ed8c8b598f");*/
+    		apiKey = "533aa05d6b034a08a84de9ed8c8b598f";
+    		baseURL = "http://services.healthindicators.gov/v5/REST.svc/";
+    		api = new hiw.API(apiKey, baseURL);
+ 
+            logInfo("API Key: " + api.apiKey)
+ 
+            api.callMethod("/VerifyApiKey", null, function (r) {
+                if (r.Data == true)
+                    logInfo("Your API key is valid.");
+                else
+                    logError("Your API key is not valid.");
+            });
+    	</script>
+	</body>
+</html>
